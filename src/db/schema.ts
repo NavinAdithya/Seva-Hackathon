@@ -6,13 +6,13 @@ let dbInstance: SQLite.SQLiteDatabase | null = null;
 
 export async function getDatabase(): Promise<SQLite.SQLiteDatabase> {
   if (dbInstance) return dbInstance;
-  
+
   dbInstance = await SQLite.openDatabaseAsync(DB_NAME);
-  
+
   await dbInstance.execAsync(`
     PRAGMA journal_mode = WAL;
     PRAGMA foreign_keys = ON;
-    
+
     CREATE TABLE IF NOT EXISTS emergency_phrases (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       category TEXT NOT NULL,
@@ -65,7 +65,7 @@ export async function getDatabase(): Promise<SQLite.SQLiteDatabase> {
       value TEXT NOT NULL
     );
   `);
-  
+
   return dbInstance;
 }
 

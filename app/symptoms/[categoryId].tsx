@@ -131,12 +131,8 @@ export default function SymptomsScreen() {
                 : '#22C55E';
 
             return (
-              <TouchableOpacity
+              <View
                 key={phrase.id}
-                accessibilityRole={'button' as AccessibilityRole}
-                accessibilityLabel={t('a11y.symptomOption', { name: text })}
-                onPress={() => handlePhraseSelect(phrase)}
-                activeOpacity={0.7}
                 style={{
                   backgroundColor: '#1A1F2E',
                   borderRadius: 16,
@@ -152,7 +148,11 @@ export default function SymptomsScreen() {
                   justifyContent: 'space-between',
                 }}
               >
-                <View
+                <TouchableOpacity
+                  accessibilityRole={'button' as AccessibilityRole}
+                  accessibilityLabel={t('a11y.symptomOption', { name: text })}
+                  onPress={() => handlePhraseSelect(phrase)}
+                  activeOpacity={0.7}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -174,7 +174,7 @@ export default function SymptomsScreen() {
                   >
                     {text}
                   </Text>
-                </View>
+                </TouchableOpacity>
 
                 {/* Speaker Button */}
                 <TouchableOpacity
@@ -191,7 +191,7 @@ export default function SymptomsScreen() {
                 >
                   <Text style={{ fontSize: 22 }}>🔊</Text>
                 </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
             );
           })}
         </ScrollView>
