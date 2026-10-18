@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "SignSOS",
+    "tagline": "Because Everyone Deserves to Be Heard"
+  },
+  "home": {
+    "title": "What do you need help with?",
+    "emergencyCard": "Emergency Card",
+    "settings": "Settings",
+    "responderMode": "Responder Mode"
+  },
+  "symptoms": {
+    "title": "Select your situation",
+    "back": "Back",
+    "speakMessage": "Speak Message",
+    "showToResponder": "Show to Responder"
+  },
+  "billboard": {
+    "title": "Show this to the person helping you",
+    "tapToSpeak": "Tap to speak this message",
+    "respondToThis": "Respond to this",
+    "back": "Go Back",
+    "askQuestion": "Ask a Question"
+  },
+  "responder": {
+    "title": "Responder Mode",
+    "patientSays": "Patient says:",
+    "askQuestion": "Ask a question:",
+    "selectAnswer": "Select an answer:",
+    "conversation": "Conversation",
+    "noQuestions": "No follow-up questions available",
+    "done": "Done"
+  },
+  "card": {
+    "title": "Emergency Card",
+    "name": "Full Name",
+    "age": "Age",
+    "bloodGroup": "Blood Group",
+    "allergies": "Allergies",
+    "medications": "Current Medications",
+    "conditions": "Medical Conditions",
+    "contacts": "Emergency Contacts",
+    "addContact": "Add Contact",
+    "save": "Save Card",
+    "saved": "Card saved successfully",
+    "language": "Preferred Language",
+    "communicationMode": "Communication Preference",
+    "show": "Show Emergency Card"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "assistanceMode": "Assistance Mode",
+    "vision": "Vision Assistance",
+    "hearing": "Hearing Assistance",
+    "speech": "Speech Assistance",
+    "haptics": "Haptic Feedback",
+    "autoSpeak": "Auto-speak messages",
+    "largeText": "Extra Large Text",
+    "highContrast": "High Contrast Mode"
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "save": "Save",
+    "loading": "Loading..."
+  },
+  "a11y": {
+    "emergencyCategory": "Emergency category: {{name}}",
+    "symptomOption": "Symptom: {{name}}. Tap to select.",
+    "speakButton": "Speak this message aloud",
+    "billboardMessage": "Emergency message displayed: {{message}}",
+    "painLevel": "Pain level {{level}} out of 10: {{description}}"
+  }
+}

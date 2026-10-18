@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "SignSOS",
+    "tagline": "क्योंकि हर किसी की आवाज़ सुनी जानी चाहिए"
+  },
+  "home": {
+    "title": "आपको किस मदद की ज़रूरत है?",
+    "emergencyCard": "आपातकालीन कार्ड",
+    "settings": "सेटिंग्स",
+    "responderMode": "प्रतिक्रियाकर्ता मोड"
+  },
+  "symptoms": {
+    "title": "अपनी स्थिति चुनें",
+    "back": "पीछे",
+    "speakMessage": "संदेश बोलें",
+    "showToResponder": "सहायक को दिखाएँ"
+  },
+  "billboard": {
+    "title": "यह मदद करने वाले व्यक्ति को दिखाएँ",
+    "tapToSpeak": "इस संदेश को बोलने के लिए टैप करें",
+    "respondToThis": "इसका जवाब दें",
+    "back": "वापस जाएँ",
+    "askQuestion": "सवाल पूछें"
+  },
+  "responder": {
+    "title": "प्रतिक्रियाकर्ता मोड",
+    "patientSays": "मरीज़ कहता है:",
+    "askQuestion": "सवाल पूछें:",
+    "selectAnswer": "जवाब चुनें:",
+    "conversation": "बातचीत",
+    "noQuestions": "कोई अनुवर्ती प्रश्न उपलब्ध नहीं",
+    "done": "पूरा हुआ"
+  },
+  "card": {
+    "title": "आपातकालीन कार्ड",
+    "name": "पूरा नाम",
+    "age": "आयु",
+    "bloodGroup": "रक्त समूह",
+    "allergies": "एलर्जी",
+    "medications": "वर्तमान दवाइयाँ",
+    "conditions": "चिकित्सा स्थितियाँ",
+    "contacts": "आपातकालीन संपर्क",
+    "addContact": "संपर्क जोड़ें",
+    "save": "कार्ड सेव करें",
+    "saved": "कार्ड सफलतापूर्वक सेव हो गया",
+    "language": "पसंदीदा भाषा",
+    "communicationMode": "संवाद प्राथमिकता",
+    "show": "आपातकालीन कार्ड दिखाएँ"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "assistanceMode": "सहायता मोड",
+    "vision": "दृष्टि सहायता",
+    "hearing": "श्रवण सहायता",
+    "speech": "वाक् सहायता",
+    "haptics": "कंपन प्रतिक्रिया",
+    "autoSpeak": "संदेश स्वतः बोलें",
+    "largeText": "बड़ा टेक्स्ट",
+    "highContrast": "उच्च कंट्रास्ट"
+  },
+  "common": {
+    "yes": "हाँ",
+    "no": "नहीं",
+    "ok": "ठीक",
+    "cancel": "रद्द करें",
+    "back": "पीछे",
+    "next": "अगला",
+    "done": "पूरा",
+    "save": "सेव",
+    "loading": "लोड हो रहा..."
+  },
+  "a11y": {
+    "emergencyCategory": "आपातकालीन श्रेणी: {{name}}",
+    "symptomOption": "लक्षण: {{name}}। चुनने के लिए टैप करें।",
+    "speakButton": "यह संदेश ज़ोर से बोलें",
+    "billboardMessage": "प्रदर्शित आपातकालीन संदेश: {{message}}",
+    "painLevel": "दर्द स्तर 10 में {{level}}: {{description}}"
+  }
+}

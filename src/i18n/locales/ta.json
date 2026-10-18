@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "SignSOS",
+    "tagline": "அனைவரும் கேட்கப்பட வேண்டும்"
+  },
+  "home": {
+    "title": "உங்களுக்கு எந்த உதவி தேவை?",
+    "emergencyCard": "அவசர அட்டை",
+    "settings": "அமைப்புகள்",
+    "responderMode": "பதிலளிப்பவர் பயன்முறை"
+  },
+  "symptoms": {
+    "title": "உங்கள் நிலையைத் தேர்ந்தெடுக்கவும்",
+    "back": "பின்",
+    "speakMessage": "செய்தியைப் பேசு",
+    "showToResponder": "உதவியாளருக்குக் காட்டு"
+  },
+  "billboard": {
+    "title": "உதவும் நபரிடம் இதைக் காட்டுங்கள்",
+    "tapToSpeak": "இந்தச் செய்தியைப் பேச தட்டவும்",
+    "respondToThis": "இதற்கு பதிலளிக்கவும்",
+    "back": "பின் செல்",
+    "askQuestion": "கேள்வி கேளுங்கள்"
+  },
+  "responder": {
+    "title": "பதிலளிப்பவர் பயன்முறை",
+    "patientSays": "நோயாளி கூறுகிறார்:",
+    "askQuestion": "கேள்வி கேளுங்கள்:",
+    "selectAnswer": "பதிலைத் தேர்ந்தெடுக்கவும்:",
+    "conversation": "உரையாடல்",
+    "noQuestions": "தொடர் கேள்விகள் இல்லை",
+    "done": "முடிந்தது"
+  },
+  "card": {
+    "title": "அவசர அட்டை",
+    "name": "முழுப் பெயர்",
+    "age": "வயது",
+    "bloodGroup": "இரத்த வகை",
+    "allergies": "ஒவ்வாமைகள்",
+    "medications": "தற்போதைய மருந்துகள்",
+    "conditions": "மருத்துவ நிலைமைகள்",
+    "contacts": "அவசர தொடர்புகள்",
+    "addContact": "தொடர்பு சேர்",
+    "save": "அட்டையைச் சேமி",
+    "saved": "அட்டை வெற்றிகரமாகச் சேமிக்கப்பட்டது",
+    "language": "விருப்ப மொழி",
+    "communicationMode": "தொடர்பு விருப்பம்",
+    "show": "அவசர அட்டையைக் காட்டு"
+  },
+  "settings": {
+    "title": "அமைப்புகள்",
+    "language": "மொழி",
+    "assistanceMode": "உதவி முறை",
+    "vision": "பார்வை உதவி",
+    "hearing": "கேட்டல் உதவி",
+    "speech": "பேச்சு உதவி",
+    "haptics": "தொடு பின்னூட்டம்",
+    "autoSpeak": "தானியங்கி பேச்சு",
+    "largeText": "பெரிய எழுத்து",
+    "highContrast": "உயர் மாறுபாடு"
+  },
+  "common": {
+    "yes": "ஆம்",
+    "no": "இல்லை",
+    "ok": "சரி",
+    "cancel": "ரத்து",
+    "back": "பின்",
+    "next": "அடுத்து",
+    "done": "முடிந்தது",
+    "save": "சேமி",
+    "loading": "ஏற்றுகிறது..."
+  },
+  "a11y": {
+    "emergencyCategory": "அவசர வகை: {{name}}",
+    "symptomOption": "அறிகுறி: {{name}}. தேர்ந்தெடுக்க தட்டவும்.",
+    "speakButton": "இந்தச் செய்தியை சத்தமாகப் பேசு",
+    "billboardMessage": "காட்டப்படும் அவசர செய்தி: {{message}}",
+    "painLevel": "வலி நிலை 10-ல் {{level}}: {{description}}"
+  }
+}
