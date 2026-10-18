@@ -47,3 +47,9 @@ signsos_flutter/.flutter-plugins
 signsos_flutter/.flutter-plugins-dependencies
 signsos_flutter/android/.gradle/
 *.apk
+
+# Tool & agent caches
+.agents/skills/
+graphify-out/cache/
+.gemini/
+.claude/
