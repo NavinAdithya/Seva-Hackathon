@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../src/store/useAppStore';
 import { Language, AssistanceMode } from '../src/types';
 import { triggerSelection } from '../src/utils/haptics';
+import { THEME } from '../src/constants/theme';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -22,16 +23,16 @@ export default function SettingsScreen() {
   const setLanguage = useAppStore((s) => s.setLanguage);
   const assistanceModes = useAppStore((s) => s.assistanceModes);
   const toggleAssistanceMode = useAppStore((s) => s.toggleAssistanceMode);
-  
+
   const hapticsEnabled = useAppStore((s) => s.hapticsEnabled);
   const setHapticsEnabled = useAppStore((s) => s.setHapticsEnabled);
-  
+
   const autoSpeak = useAppStore((s) => s.autoSpeakEnabled);
   const setAutoSpeak = useAppStore((s) => s.setAutoSpeakEnabled);
-  
+
   const largeText = useAppStore((s) => s.largeTextEnabled);
   const setLargeText = useAppStore((s) => s.setLargeTextEnabled);
-  
+
   const highContrast = useAppStore((s) => s.highContrastEnabled);
   const setHighContrast = useAppStore((s) => s.setHighContrastEnabled);
 
@@ -43,7 +44,7 @@ export default function SettingsScreen() {
   const isModeActive = (m: AssistanceMode) => assistanceModes.includes(m);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#0B0F19' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: THEME.colors.canvas }}>
       <ScrollView
         contentContainerStyle={{
           padding: 16,
@@ -52,14 +53,14 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Section: Language */}
-        <View style={{ marginBottom: 24 }}>
+        <View style={{ marginBottom: 20 }}>
           <Text
             accessibilityRole={'header' as AccessibilityRole}
             style={{
-              color: '#FEF08A',
-              fontSize: 18,
+              color: THEME.colors.accent,
+              fontSize: 17,
               fontWeight: '800',
-              marginBottom: 12,
+              marginBottom: 10,
             }}
           >
             🌐 {t('settings.language')}
@@ -67,11 +68,11 @@ export default function SettingsScreen() {
           <View
             style={{
               flexDirection: 'row',
-              backgroundColor: '#1A1F2E',
+              backgroundColor: THEME.colors.surface,
               borderRadius: 14,
               padding: 4,
               borderWidth: 1,
-              borderColor: '#374151',
+              borderColor: THEME.colors.hairline,
             }}
           >
             {(
@@ -93,14 +94,19 @@ export default function SettingsScreen() {
                   alignItems: 'center',
                   borderRadius: 10,
                   backgroundColor:
-                    language === item.code ? '#FEF08A' : 'transparent',
+                    language === item.code
+                      ? THEME.colors.accent
+                      : 'transparent',
                 }}
               >
                 <Text
                   style={{
-                    fontWeight: '700',
-                    fontSize: 14,
-                    color: language === item.code ? '#0B0F19' : '#94A3B8',
+                    fontWeight: '800',
+                    fontSize: 13,
+                    color:
+                      language === item.code
+                        ? THEME.colors.accentOnHighVis
+                        : THEME.colors.textSecondary,
                   }}
                 >
                   {item.label}
@@ -111,42 +117,40 @@ export default function SettingsScreen() {
         </View>
 
         {/* Section: Assistance Modes */}
-        <View style={{ marginBottom: 24 }}>
+        <View style={{ marginBottom: 20 }}>
           <Text
             accessibilityRole={'header' as AccessibilityRole}
             style={{
-              color: '#FEF08A',
-              fontSize: 18,
+              color: THEME.colors.accent,
+              fontSize: 17,
               fontWeight: '800',
-              marginBottom: 12,
+              marginBottom: 10,
             }}
           >
             ♿ {t('settings.assistanceMode')}
           </Text>
 
-          <View style={{ gap: 10 }}>
-            {(
-              [
-                {
-                  mode: 'vision' as AssistanceMode,
-                  title: t('settings.vision'),
-                  desc: 'High-contrast colors, spoken announcements, TalkBack support',
-                  icon: '👁️',
-                },
-                {
-                  mode: 'hearing' as AssistanceMode,
-                  title: t('settings.hearing'),
-                  desc: 'High-visibility billboard, pictograms, structured Q&A',
-                  icon: '🦻',
-                },
-                {
-                  mode: 'speech' as AssistanceMode,
-                  title: t('settings.speech'),
-                  desc: 'One-tap AAC phrases, text-to-speech speaker, responder mode',
-                  icon: '🗣️',
-                },
-              ] as const
-            ).map((item) => {
+          <View style={{ gap: 8 }}>
+            {[
+              {
+                mode: 'vision' as AssistanceMode,
+                icon: '👁️',
+                title: t('assistance.vision'),
+                desc: 'High-contrast colors, spoken announcements, TalkBack support',
+              },
+              {
+                mode: 'hearing' as AssistanceMode,
+                icon: '🦻',
+                title: t('assistance.hearing'),
+                desc: 'High-visibility billboard, pictograms, structured Q&A',
+              },
+              {
+                mode: 'speech' as AssistanceMode,
+                icon: '🗣️',
+                title: t('assistance.speech'),
+                desc: 'One-tap AAC phrases, text-to-speech speaker, responder mode',
+              },
+            ].map((item) => {
               const active = isModeActive(item.mode);
               return (
                 <TouchableOpacity
@@ -158,60 +162,72 @@ export default function SettingsScreen() {
                     if (hapticsEnabled) await triggerSelection();
                     toggleAssistanceMode(item.mode);
                   }}
+                  activeOpacity={0.7}
                   style={{
-                    backgroundColor: active ? '#252B3B' : '#1A1F2E',
-                    borderRadius: 14,
-                    padding: 16,
-                    borderWidth: 2,
-                    borderColor: active ? '#FEF08A' : '#374151',
+                    backgroundColor: active
+                      ? THEME.colors.surfaceElevated
+                      : THEME.colors.surface,
+                    borderRadius: THEME.borderRadius.card,
+                    borderWidth: 1.5,
+                    borderColor: active
+                      ? THEME.colors.accent
+                      : THEME.colors.hairline,
+                    padding: 14,
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                    <Text style={{ fontSize: 32, marginRight: 12 }}>
-                      {item.icon}
-                    </Text>
-                    <View style={{ flex: 1, paddingRight: 8 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, paddingRight: 10 }}>
+                    <Text style={{ fontSize: 28, marginRight: 12 }}>{item.icon}</Text>
+                    <View style={{ flex: 1 }}>
                       <Text
                         style={{
-                          color: '#F8FAFC',
+                          color: active ? THEME.colors.accent : THEME.colors.textPrimary,
                           fontSize: 16,
-                          fontWeight: '700',
+                          fontWeight: '800',
                         }}
                       >
                         {item.title}
                       </Text>
-                      <Text style={{ color: '#94A3B8', fontSize: 13, marginTop: 2 }}>
+                      <Text style={{ color: THEME.colors.textSecondary, fontSize: 12, marginTop: 2 }}>
                         {item.desc}
                       </Text>
                     </View>
                   </View>
-                  <Text
+                  <View
                     style={{
-                      fontSize: 22,
-                      color: active ? '#FEF08A' : '#4B5563',
-                      fontWeight: '800',
+                      width: 24,
+                      height: 24,
+                      borderRadius: 12,
+                      borderWidth: 2,
+                      borderColor: active ? THEME.colors.accent : THEME.colors.hairlineStrong,
+                      backgroundColor: active ? THEME.colors.accent : 'transparent',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {active ? '✓' : '○'}
-                  </Text>
+                    {active && (
+                      <Text style={{ color: THEME.colors.accentOnHighVis, fontSize: 14, fontWeight: '900' }}>
+                        ✓
+                      </Text>
+                    )}
+                  </View>
                 </TouchableOpacity>
               );
             })}
           </View>
         </View>
 
-        {/* Section: Interaction & Display Preferences */}
-        <View style={{ marginBottom: 24 }}>
+        {/* Section: Display & Feedback */}
+        <View style={{ marginBottom: 20 }}>
           <Text
             accessibilityRole={'header' as AccessibilityRole}
             style={{
-              color: '#FEF08A',
-              fontSize: 18,
+              color: THEME.colors.accent,
+              fontSize: 17,
               fontWeight: '800',
-              marginBottom: 12,
+              marginBottom: 10,
             }}
           >
             ⚙️ Display & Feedback
@@ -219,11 +235,11 @@ export default function SettingsScreen() {
 
           <View
             style={{
-              backgroundColor: '#1A1F2E',
-              borderRadius: 14,
-              borderWidth: 1,
-              borderColor: '#374151',
+              backgroundColor: THEME.colors.surface,
+              borderRadius: THEME.borderRadius.card,
               paddingHorizontal: 16,
+              borderWidth: 1,
+              borderColor: THEME.colors.hairline,
             }}
           >
             {/* Haptics */}
@@ -234,22 +250,22 @@ export default function SettingsScreen() {
                 alignItems: 'center',
                 paddingVertical: 14,
                 borderBottomWidth: 1,
-                borderBottomColor: '#2D3748',
+                borderBottomColor: THEME.colors.hairline,
               }}
             >
               <View style={{ flex: 1, paddingRight: 12 }}>
-                <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: '600' }}>
+                <Text style={{ color: THEME.colors.textPrimary, fontSize: 15, fontWeight: '700' }}>
                   {t('settings.haptics')}
                 </Text>
-                <Text style={{ color: '#94A3B8', fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: THEME.colors.textSecondary, fontSize: 12, marginTop: 2 }}>
                   Vibrational confirmation on button selections
                 </Text>
               </View>
               <Switch
                 value={hapticsEnabled}
                 onValueChange={setHapticsEnabled}
-                trackColor={{ false: '#374151', true: '#FEF08A' }}
-                thumbColor={hapticsEnabled ? '#0B0F19' : '#94A3B8'}
+                trackColor={{ false: '#374151', true: THEME.colors.accent }}
+                thumbColor={hapticsEnabled ? THEME.colors.accentOnHighVis : '#94A3B8'}
               />
             </View>
 
@@ -261,22 +277,22 @@ export default function SettingsScreen() {
                 alignItems: 'center',
                 paddingVertical: 14,
                 borderBottomWidth: 1,
-                borderBottomColor: '#2D3748',
+                borderBottomColor: THEME.colors.hairline,
               }}
             >
               <View style={{ flex: 1, paddingRight: 12 }}>
-                <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: '600' }}>
+                <Text style={{ color: THEME.colors.textPrimary, fontSize: 15, fontWeight: '700' }}>
                   {t('settings.autoSpeak')}
                 </Text>
-                <Text style={{ color: '#94A3B8', fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: THEME.colors.textSecondary, fontSize: 12, marginTop: 2 }}>
                   Immediately speak phrase upon selection
                 </Text>
               </View>
               <Switch
                 value={autoSpeak}
                 onValueChange={setAutoSpeak}
-                trackColor={{ false: '#374151', true: '#FEF08A' }}
-                thumbColor={autoSpeak ? '#0B0F19' : '#94A3B8'}
+                trackColor={{ false: '#374151', true: THEME.colors.accent }}
+                thumbColor={autoSpeak ? THEME.colors.accentOnHighVis : '#94A3B8'}
               />
             </View>
 
@@ -288,22 +304,22 @@ export default function SettingsScreen() {
                 alignItems: 'center',
                 paddingVertical: 14,
                 borderBottomWidth: 1,
-                borderBottomColor: '#2D3748',
+                borderBottomColor: THEME.colors.hairline,
               }}
             >
               <View style={{ flex: 1, paddingRight: 12 }}>
-                <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: '600' }}>
+                <Text style={{ color: THEME.colors.textPrimary, fontSize: 15, fontWeight: '700' }}>
                   {t('settings.largeText')}
                 </Text>
-                <Text style={{ color: '#94A3B8', fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: THEME.colors.textSecondary, fontSize: 12, marginTop: 2 }}>
                   Increase UI typography scale across all screens
                 </Text>
               </View>
               <Switch
                 value={largeText}
                 onValueChange={setLargeText}
-                trackColor={{ false: '#374151', true: '#FEF08A' }}
-                thumbColor={largeText ? '#0B0F19' : '#94A3B8'}
+                trackColor={{ false: '#374151', true: THEME.colors.accent }}
+                thumbColor={largeText ? THEME.colors.accentOnHighVis : '#94A3B8'}
               />
             </View>
 
@@ -317,18 +333,18 @@ export default function SettingsScreen() {
               }}
             >
               <View style={{ flex: 1, paddingRight: 12 }}>
-                <Text style={{ color: '#F8FAFC', fontSize: 16, fontWeight: '600' }}>
+                <Text style={{ color: THEME.colors.textPrimary, fontSize: 15, fontWeight: '700' }}>
                   {t('settings.highContrast')}
                 </Text>
-                <Text style={{ color: '#94A3B8', fontSize: 12, marginTop: 2 }}>
+                <Text style={{ color: THEME.colors.textSecondary, fontSize: 12, marginTop: 2 }}>
                   WCAG 2.1 AAA high-contrast palette (#0B0F19 / #FEF08A)
                 </Text>
               </View>
               <Switch
                 value={highContrast}
                 onValueChange={setHighContrast}
-                trackColor={{ false: '#374151', true: '#FEF08A' }}
-                thumbColor={highContrast ? '#0B0F19' : '#94A3B8'}
+                trackColor={{ false: '#374151', true: THEME.colors.accent }}
+                thumbColor={highContrast ? THEME.colors.accentOnHighVis : '#94A3B8'}
               />
             </View>
           </View>
@@ -337,17 +353,17 @@ export default function SettingsScreen() {
         {/* Section: Project Information & Disclosures */}
         <View
           style={{
-            backgroundColor: '#1E293B',
-            borderRadius: 16,
-            padding: 18,
+            backgroundColor: THEME.colors.surface,
+            borderRadius: THEME.borderRadius.card,
+            padding: 16,
             borderWidth: 1,
-            borderColor: '#38BDF8',
+            borderColor: THEME.colors.medical,
           }}
         >
           <Text
             style={{
-              color: '#38BDF8',
-              fontSize: 14,
+              color: THEME.colors.medical,
+              fontSize: 13,
               fontWeight: '800',
               textTransform: 'uppercase',
               letterSpacing: 1,
@@ -358,9 +374,9 @@ export default function SettingsScreen() {
           </Text>
           <Text
             style={{
-              color: '#F8FAFC',
+              color: THEME.colors.textPrimary,
               fontSize: 15,
-              fontWeight: '700',
+              fontWeight: '800',
               marginBottom: 8,
             }}
           >
@@ -368,7 +384,7 @@ export default function SettingsScreen() {
           </Text>
           <Text
             style={{
-              color: '#94A3B8',
+              color: THEME.colors.textSecondary,
               fontSize: 13,
               lineHeight: 18,
               marginBottom: 10,
@@ -379,10 +395,10 @@ export default function SettingsScreen() {
             between individuals with disabilities and first responders. It does
             not make clinical diagnostic or triage decisions.
           </Text>
-          <Text style={{ color: '#22C55E', fontSize: 12, fontWeight: '700' }}>
+          <Text style={{ color: THEME.colors.success, fontSize: 12, fontWeight: '800' }}>
             ✓ 100% Offline-First (No internet required, Airplane Mode verified)
           </Text>
-          <Text style={{ color: '#22C55E', fontSize: 12, fontWeight: '700' }}>
+          <Text style={{ color: THEME.colors.success, fontSize: 12, fontWeight: '800' }}>
             ✓ Zero Cloud Transmission (DPDP Act Private)
           </Text>
         </View>

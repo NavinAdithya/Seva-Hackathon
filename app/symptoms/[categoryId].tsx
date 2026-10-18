@@ -16,6 +16,7 @@ import { CATEGORIES } from '../../src/constants/categories';
 import { getPhraseText, getCategoryLabel } from '../../src/utils/textHelpers';
 import { speakText } from '../../src/utils/speech';
 import { triggerSelection } from '../../src/utils/haptics';
+import { THEME } from '../../src/constants/theme';
 
 export default function SymptomsScreen() {
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function SymptomsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0B0F19' }}>
+    <View style={{ flex: 1, backgroundColor: THEME.colors.canvas }}>
       {/* Category Header Banner */}
       {category && (
         <View
@@ -89,15 +90,15 @@ export default function SymptomsScreen() {
           <View>
             <Text
               style={{
-                color: '#F8FAFC',
+                color: THEME.colors.textPrimary,
                 fontSize: 22,
                 fontWeight: '800',
               }}
             >
               {getCategoryLabel(category, language)}
             </Text>
-            <Text style={{ color: '#E2E8F0', fontSize: 13 }}>
-              {t('symptoms.title')}
+            <Text style={{ color: '#E2E8F0', fontSize: 13, fontWeight: '500' }}>
+              {t('symptoms.title')} • {phrases.length} phrases available
             </Text>
           </View>
         </View>
@@ -111,7 +112,7 @@ export default function SymptomsScreen() {
             alignItems: 'center',
           }}
         >
-          <ActivityIndicator size="large" color="#FEF08A" />
+          <ActivityIndicator size="large" color={THEME.colors.accent} />
         </View>
       ) : (
         <ScrollView
@@ -125,24 +126,31 @@ export default function SymptomsScreen() {
             const text = getPhraseText(phrase, language);
             const severityColor =
               phrase.severity === 'critical'
-                ? '#EF4444'
+                ? THEME.colors.emergencyCritical
                 : phrase.severity === 'high'
-                ? '#F59E0B'
-                : '#22C55E';
+                ? THEME.colors.emergencyHigh
+                : THEME.colors.emergencyStable;
+
+            const severityBadge =
+              phrase.severity === 'critical'
+                ? { label: 'CRITICAL', color: THEME.colors.emergencyCritical, bg: THEME.colors.emergencyCriticalBg }
+                : phrase.severity === 'high'
+                ? { label: 'URGENT', color: THEME.colors.emergencyHigh, bg: THEME.colors.emergencyHighBg }
+                : { label: 'STABLE', color: THEME.colors.emergencyStable, bg: THEME.colors.emergencyStableBg };
 
             return (
               <View
                 key={phrase.id}
                 style={{
-                  backgroundColor: '#1A1F2E',
-                  borderRadius: 16,
+                  backgroundColor: THEME.colors.surface,
+                  borderRadius: THEME.borderRadius.card,
                   borderLeftWidth: 6,
                   borderLeftColor: severityColor,
                   borderWidth: 1,
-                  borderColor: '#2D3748',
-                  padding: 16,
+                  borderColor: THEME.colors.hairline,
+                  padding: 14,
                   marginVertical: 6,
-                  minHeight: 76,
+                  minHeight: 78,
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -151,6 +159,7 @@ export default function SymptomsScreen() {
                 <TouchableOpacity
                   accessibilityRole={'button' as AccessibilityRole}
                   accessibilityLabel={t('a11y.symptomOption', { name: text })}
+                  accessibilityHint="Double tap to open 1.5-meter high-visibility billboard"
                   onPress={() => handlePhraseSelect(phrase)}
                   activeOpacity={0.7}
                   style={{
@@ -160,36 +169,65 @@ export default function SymptomsScreen() {
                     paddingRight: 10,
                   }}
                 >
-                  <Text style={{ fontSize: 32, marginRight: 14 }}>
+                  <Text style={{ fontSize: 32, marginRight: 12 }}>
                     {phrase.icon}
                   </Text>
-                  <Text
-                    style={{
-                      color: '#F8FAFC',
-                      fontSize: largeText ? 20 : 17,
-                      fontWeight: '600',
-                      flex: 1,
-                      lineHeight: 24,
-                    }}
-                  >
-                    {text}
-                  </Text>
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        color: THEME.colors.textPrimary,
+                        fontSize: largeText ? 20 : 16,
+                        fontWeight: '700',
+                        lineHeight: 22,
+                        marginBottom: 4,
+                      }}
+                    >
+                      {text}
+                    </Text>
+                    {/* WCAG 1.4.1 Compliant Textual Severity Badge */}
+                    <View
+                      style={{
+                        alignSelf: 'flex-start',
+                        backgroundColor: severityBadge.bg,
+                        paddingVertical: 2,
+                        paddingHorizontal: 8,
+                        borderRadius: 6,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: severityBadge.color,
+                          fontSize: 10,
+                          fontWeight: '800',
+                          letterSpacing: 0.5,
+                        }}
+                      >
+                        {severityBadge.label}
+                      </Text>
+                    </View>
+                  </View>
                 </TouchableOpacity>
 
                 {/* Speaker Button */}
                 <TouchableOpacity
                   accessibilityRole={'button' as AccessibilityRole}
                   accessibilityLabel={t('a11y.speakButton')}
+                  accessibilityHint="Double tap to announce this phrase out loud"
                   onPress={(e) => handleSpeakOnly(phrase, e)}
+                  activeOpacity={0.7}
                   style={{
                     padding: 10,
-                    backgroundColor: '#252B3B',
+                    backgroundColor: THEME.colors.surfaceElevated,
                     borderRadius: 12,
                     borderWidth: 1,
-                    borderColor: '#4B5563',
+                    borderColor: THEME.colors.hairlineStrong,
+                    minWidth: 44,
+                    minHeight: 44,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Text style={{ fontSize: 22 }}>🔊</Text>
+                  <Text style={{ fontSize: 20 }}>🔊</Text>
                 </TouchableOpacity>
               </View>
             );

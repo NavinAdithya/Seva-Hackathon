@@ -1,52 +1,66 @@
 ---
 name: dev-design-orchestrator
-description: Master autonomous orchestrator that automatically analyzes user prompts and routes execution to the appropriate specialized design, UI/UX, 3D, animation, or development skills (ui-ux-pro-max, taste-skill, awesome-design-md, 3dviz-pro-max, ponytail, graphify).
+description: Master autonomous orchestrator that indexes and intelligently routes across all 1,745+ installed skills and 13+ active MCP tool suites. Prevents blind single-tool usage and eliminates bloat by selecting the exact primary, complementary, and MCP tools needed for any task.
 ---
 
-# Dev & Design Orchestrator (Autonomous Super-Skill)
+# Dev & Design Autonomous Master Orchestrator
 
-The **`dev-design-orchestrator`** is the master execution engine for Antigravity. It unifies all installed design, UI/UX, 3D, animation, and engineering skills into a seamless, autonomous workflow.
-
-Whenever a prompt arrives, this orchestrator evaluates the domain requirements and automatically activates the exact specialized skills and CLI tools needed for the task.
-
----
-
-## Autonomous Skill Routing Matrix
-
-| Domain | When Prompt Touches | Activated Skills | Primary Tool / Action |
-|---|---|---|---|
-| **1. Brand Design Systems** | Brands (Linear, Apple, Stripe, Vercel, Raycast, Claude, etc.), design tokens, `DESIGN.md` | **`awesome-design-md`** | Lookup `~/.gemini/config/awesome-design-md/design-md/<brand>/DESIGN.md`<br>Apply tokens: `python ~/.gemini/config/awesome-design-md/design_md.py apply <brand> .` |
-| **2. UI/UX & Layout Structure** | Screens, navigation, forms, layouts, responsive design, color palettes, typography, accessibility | **`ui-ux-pro-max`** | Search guidelines: `python ~/.gemini/config/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <ux\|style\|color\|typography>`<br>Full system: `--design-system -p "<Project>"` |
-| **3. Anti-Slop Visual Taste** | High-end visual hierarchy, editorial/brutalist styling, modernizing ugly/generic interfaces | **`taste-skill`** (`design-taste-frontend`, `high-end-visual-design`, `minimalist-ui`) | Ban template tropes (3 centered cards, soft purple pills). Enforce asymmetric layouts and high scale contrast. |
-| **4. Animations & Micro-Interactions** | Gestures, haptics, transitions, scroll animations, GSAP, Reanimated, spring physics | **`ui-ux-pro-max`** & **`gpt-taste`** | Query animation presets: `python ~/.gemini/config/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain gsap`<br>GPU transforms & opacity only; respect reduced-motion. |
-| **5. 3D & Spatial Visualization** | 3D models, Three.js, React Three Fiber, WebGL, Blender, spatial UI, physical simulation | **`3dviz-pro-max`** | Query 3D recipes: `python ~/.gemini/config/skills/3dviz-pro-max/scripts/search.py "<subject>"`<br>Single allocation lifecycle, 60fps mobile target. |
-| **6. Code & Minimalist Engineering** | Writing code, refactoring, fixing bugs, creating endpoints/stores/components | **`ponytail`** | Follow the 6-Step Decision Ladder: reuse existing codebase code -> native platform primitives -> installed packages -> smallest complete diff. |
-| **7. Architecture & Code Navigation** | "How does X work?", tracing dependencies, exploring unfamiliar code | **`graphify`** | Run `graphify query "<question>"` before reading raw files. Run `graphify update .` after modifications. |
+The **`dev-design-orchestrator`** is the master autonomous intelligence layer for Antigravity. It indexes your entire ecosystem of **1,745+ installed skills** and **13+ MCP servers**, continuously maintaining a unified catalog to route tasks with high precision.
 
 ---
 
-## Automatic Execution Protocol
+## Anti-Blindness & Multi-Skill Synergy
 
-### Step 1: Detect & Compose
-When analyzing any request, determine which facets are present. If a request spans multiple areas (e.g., *"Build an animated 3D emergency button card styled like Apple with clean code"*), compose the requirements seamlessly:
-1. **Brand Aesthetic**: Pull Apple's design tokens from `awesome-design-md`.
-2. **UI & A11y**: Enforce `ui-ux-pro-max` rules (44×44pt touch target, 4.5:1 text contrast, haptics).
-3. **3D Element**: Anchor Three.js / React Three Fiber scene with `3dviz-pro-max` (allocate once, 60fps).
-4. **Code Quality**: Apply `ponytail` (zero boilerplate, standard primitives, minimal diff).
+A common failure mode of AI assistants is either:
+1. **Blind Single-Skill Bias**: Using only one default skill (e.g., only general coding) even when the user asked for high-end styling, accessibility, or 3D graphics.
+2. **Tool Bloat**: Dumping dozens of irrelevant skills into the context, wasting tokens and polluting instructions.
 
-### Step 2: Instant CLI Routing Helper
-To query recommended skills and actions programmatically:
+The orchestrator guarantees **balanced, context-aware execution**:
+- **Primary Skill (Driver)**: Handles the central objective (e.g., `ui-ux-pro-max` for UI layouts, `3dviz-pro-max` for 3D scenes, `hexstrike-ai` for security audits, `graphify` for architecture tracing).
+- **Complementary Skills (Quality Assurance)**: Enforces cross-cutting standards (e.g., `ponytail` to prevent boilerplate and keep code diffs minimal; `awesome-design-md` for brand tokens; `taste-skill` for anti-slop visual hierarchy).
+- **Active MCP Tools (Real-Time Execution)**: Integrates live MCP capabilities (e.g., `playwright` for web testing, `shadcn` for components, `flutter_dart-mcp-server` for Flutter LSP, `chrome-browser` for live DOM).
+- **Intentionally Bypassed**: Filters out mismatched platforms (e.g., skips Flutter tools when the workspace is React Native / Expo).
+
+---
+
+## Ecosystem Scope (1,745+ Skills & MCP Tools)
+
+| Domain | Indexed Capabilities | Primary & Complementary Skills |
+|---|---|---|
+| **Mobile & Expo** | `expo-*`, `upgrading-expo`, `building-native-ui`, `zustand-store-ts`, `zod-validation-expert` | **`ui-ux-pro-max`** + **`ponytail`** |
+| **Brand Systems** | Linear, Apple, Stripe, Vercel, Raycast, Claude, Supabase, Tesla, Runway (84+ brand specs) | **`awesome-design-md`** |
+| **UI/UX & A11y** | 79 design styles, 192 product palettes, 74 font pairings, 119 UX rules, WCAG 4.5:1 | **`ui-ux-pro-max`** |
+| **Anti-Slop Visuals** | Asymmetric layouts, editorial typography, Swiss brutalism, minimalist UI | **`taste-skill`** suite |
+| **Motion & Gestures** | GSAP presets, scroll triggers, GPU-accelerated transforms, spring physics, haptics | **`ui-ux-pro-max`** (gsap) & **`gpt-taste`** |
+| **3D & Spatial** | Three.js, React Three Fiber, WebGL, Blender, spatial UI, physical simulation | **`3dviz-pro-max`** |
+| **Code Minimalism** | 6-Step Decision Ladder, smallest clean diff, zero boilerplate, anti-bloat | **`ponytail`** (Lazy Senior Dev) |
+| **Code Navigation** | AST knowledge graph, relationship tracing, token reduction, call graphs | **`graphify`** |
+| **Security & Pentest** | 120+ tools (Nmap, Gobuster, SQLMap, Nuclei, Metasploit, Ghidra, Burp), CTF skills | **`hexstrike-ai` (MCP)** + `ctf-*` |
+| **Web & E2E Testing** | Browser automation, live DOM inspection, screenshot validation, codegen | **`playwright` (MCP)** & **`chrome-browser`** |
+| **Cloud & Data** | BigQuery SQL, Dataform, dbt, Cloud Composer, Spark, Firebase | `gcp-data-pipelines`, `firebase-mcp-server` |
+
+---
+
+## CLI Tools
+
+### 1. Analyze Task Routing
+Evaluate which skills, MCP tools, and guardrails apply to a prompt:
 ```bash
 python .agents/skills/dev-design-orchestrator/scripts/router.py "<your prompt or task description>"
 ```
-*(Supports `--json` for structured data).*
 
----
+### 2. Search All 1,745+ Installed Skills
+Directly search the catalog by keyword:
+```bash
+python .agents/skills/dev-design-orchestrator/scripts/router.py --search "expo"
+python .agents/skills/dev-design-orchestrator/scripts/router.py --search "security"
+```
 
-## Non-Negotiable Guardrails (Always Active)
-
-1. **Accessibility (WCAG 2.1/2.2)**: Text contrast ≥ 4.5:1, touch target ≥ 44×44pt with ≥ 8pt spacing. Never remove focus rings or omit `accessibilityLabel` on icon buttons.
-2. **Zero Slop**: Never generate generic AI template designs (generic pill badges, cookie-cutter card layouts, un-tokenized raw hex colors).
-3. **Lazy Senior Dev (Ponytail)**: Solve the whole problem with the least new code. Never add unrequested wrapper components or unnecessary dependencies.
-4. **3D Performance**: Allocate geometries and materials once; update matrices and uniforms on render tick. Never allocate in animation loops.
-5. **Token Reduction (Graphify)**: Query the knowledge graph before broad raw source scans.
+### 3. Fetch & Re-Index Newly Installed Skills
+Whenever you install new skills with `npx skills add` or add plugins:
+```bash
+python .agents/skills/dev-design-orchestrator/scripts/index_skills.py
+# or
+python .agents/skills/dev-design-orchestrator/scripts/router.py --refresh
+```
+*(Runs in ~3 seconds and updates `skills_catalog.json` across workspace, global, and universal folders).*

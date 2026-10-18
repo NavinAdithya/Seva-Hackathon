@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Share,
   AccessibilityRole,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -20,7 +21,6 @@ import {
   ResponderQuestion,
   QuestionOption,
 } from '../src/types';
-import { PAIN_SCALE } from '../src/constants/categories';
 import {
   getPhraseText,
   getQuestionText,
@@ -28,6 +28,7 @@ import {
 } from '../src/utils/textHelpers';
 import { speakText } from '../src/utils/speech';
 import { triggerSelection, triggerSuccess } from '../src/utils/haptics';
+import { THEME } from '../src/constants/theme';
 
 interface TranscriptItem {
   speaker: 'patient' | 'responder';
@@ -103,60 +104,87 @@ export default function ResponderScreen() {
 
     setTranscript((prev) => [
       ...prev,
-      { speaker: 'responder', text: qText, time: `Q${currentQuestionIndex + 1}` },
-      { speaker: 'patient', text: optText, time: 'Answer' },
+      { speaker: 'responder', text: qText, time: 'Q' },
+      { speaker: 'patient', text: optText, time: 'A' },
     ]);
 
-    // Advance to next question automatically if available
+    // Auto-advance to next question if available
     if (currentQuestionIndex + 1 < questions.length) {
-      loadQuestionOptions(currentQuestionIndex + 1);
+      await loadQuestionOptions(currentQuestionIndex + 1);
     }
   };
 
-  const handleSelectPain = async (val: number, label: string) => {
+  const handleSelectPain = async (painValue: number, label: string) => {
     if (hapticsEnabled) await triggerSelection();
-    setSelectedPain(val);
-    const painText = `Pain level: ${val}/10 (${label})`;
+    setSelectedPain(painValue);
+
+    const painMessage = `Pain level: ${painValue}/10 (${label})`;
     if (autoSpeak) {
-      speakText(painText, language);
+      speakText(painMessage, language);
     }
+
     setTranscript((prev) => [
       ...prev,
-      { speaker: 'responder', text: 'Pain Severity Assessment', time: 'Scale' },
-      { speaker: 'patient', text: painText, time: 'Answer' },
+      { speaker: 'responder', text: 'Pain Severity Assessment', time: 'Pain' },
+      { speaker: 'patient', text: painMessage, time: 'Pain' },
     ]);
   };
+
+  const handleShareSummary = async () => {
+    if (hapticsEnabled) await triggerSelection();
+    const summaryHeader = `🏥 SignSOS Emergency Handover Summary\nChief Complaint: ${phrase ? getPhraseText(phrase, language) : 'Emergency'}\nPain Level: ${selectedPain !== null ? `${selectedPain}/10` : 'Not recorded'}\n\nClinical Q&A Transcript:\n`;
+    const summaryBody = transcript
+      .map((item) => `${item.speaker === 'patient' ? '👤 Patient' : '🩺 Clinician'}: ${item.text}`)
+      .join('\n');
+
+    Share.share({
+      title: 'SignSOS Emergency Handover',
+      message: `${summaryHeader}${summaryBody}`,
+    });
+  };
+
+  const PAIN_SCALE = [
+    { value: 0, emoji: '😊', label_en: 'No Pain', label_ta: 'வலி இல்லை', label_hi: 'कोई दर्द नहीं', color: '#10B981' },
+    { value: 2, emoji: '🙂', label_en: 'Mild', label_ta: 'லேசான', label_hi: 'हल्का', color: '#84CC16' },
+    { value: 4, emoji: '😐', label_en: 'Moderate', label_ta: 'நடுத்தர', label_hi: 'मध्यम', color: '#EAB308' },
+    { value: 6, emoji: '😣', label_en: 'Severe', label_ta: 'கடுமையான', label_hi: 'गंभीर', color: '#F97316' },
+    { value: 8, emoji: '😫', label_en: 'Very Severe', label_ta: 'மிக கடுமையான', label_hi: 'बहुत गंभीर', color: '#EA580C' },
+    { value: 10, emoji: '😭', label_en: 'Worst Pain', label_ta: 'அதிகபட்ச வலி', label_hi: 'असहनीय दर्द', color: '#EF4444' },
+  ];
 
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#0B0F19' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: THEME.colors.canvas }}>
       <ScrollView
         contentContainerStyle={{
           padding: 16,
-          paddingBottom: 50,
+          paddingBottom: 40,
         }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Clinician Handshake Mode Banner */}
+        {/* Top Header Card */}
         <View
           style={{
-            backgroundColor: '#1E3A5F',
-            borderRadius: 16,
+            backgroundColor: '#16233B',
+            borderRadius: THEME.borderRadius.card,
             padding: 16,
             marginBottom: 16,
-            borderWidth: 2,
-            borderColor: '#3B82F6',
+            borderWidth: 1.5,
+            borderColor: '#60A5FA',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 28, marginRight: 10 }}>🩺</Text>
-            <View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <Text style={{ fontSize: 32, marginRight: 12 }}>🩺</Text>
+            <View style={{ flex: 1 }}>
               <Text
                 style={{
                   color: '#93C5FD',
                   fontSize: 12,
-                  fontWeight: '700',
+                  fontWeight: '800',
                   textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
@@ -165,36 +193,55 @@ export default function ResponderScreen() {
               </Text>
               <Text
                 style={{
-                  color: '#F8FAFC',
-                  fontSize: 17,
-                  fontWeight: '700',
+                  color: THEME.colors.textPrimary,
+                  fontSize: 16,
+                  fontWeight: '800',
                 }}
               >
                 Structured Two-Way Communication Aid
               </Text>
             </View>
           </View>
+
+          {/* Quick Share Transcript Button */}
+          <TouchableOpacity
+            accessibilityRole={'button' as AccessibilityRole}
+            accessibilityLabel="Export or Share Clinical Transcript with Paramedic"
+            onPress={handleShareSummary}
+            style={{
+              backgroundColor: THEME.colors.surfaceElevated,
+              paddingVertical: 8,
+              paddingHorizontal: 12,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#60A5FA',
+            }}
+          >
+            <Text style={{ color: '#93C5FD', fontSize: 13, fontWeight: '800' }}>
+              📤 Export
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* Live Conversation Transcript */}
         <View
           style={{
-            backgroundColor: '#141824',
-            borderRadius: 16,
+            backgroundColor: THEME.colors.surface,
+            borderRadius: THEME.borderRadius.card,
             padding: 16,
-            marginBottom: 20,
+            marginBottom: 16,
             borderWidth: 1,
-            borderColor: '#2D3748',
+            borderColor: THEME.colors.hairline,
           }}
         >
           <Text
             style={{
-              color: '#94A3B8',
-              fontSize: 13,
-              fontWeight: '700',
+              color: THEME.colors.textSecondary,
+              fontSize: 12,
+              fontWeight: '800',
               textTransform: 'uppercase',
               letterSpacing: 1,
-              marginBottom: 12,
+              marginBottom: 10,
             }}
           >
             📋 {t('responder.conversation')}
@@ -208,24 +255,24 @@ export default function ResponderScreen() {
                 style={{
                   marginVertical: 4,
                   alignSelf: isPatient ? 'flex-start' : 'flex-end',
-                  maxWidth: '85%',
+                  maxWidth: '88%',
                 }}
               >
                 <View
                   style={{
-                    backgroundColor: isPatient ? '#252B3B' : '#1E3A5F',
+                    backgroundColor: isPatient ? '#232D42' : '#1E3A5F',
                     borderRadius: 14,
                     paddingVertical: 10,
                     paddingHorizontal: 14,
                     borderWidth: 1,
-                    borderColor: isPatient ? '#FEF08A' : '#60A5FA',
+                    borderColor: isPatient ? THEME.colors.accent : '#60A5FA',
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 11,
-                      fontWeight: '700',
-                      color: isPatient ? '#FEF08A' : '#93C5FD',
+                      fontWeight: '800',
+                      color: isPatient ? THEME.colors.accent : '#93C5FD',
                       marginBottom: 2,
                     }}
                   >
@@ -233,10 +280,10 @@ export default function ResponderScreen() {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: '600',
-                      color: '#F8FAFC',
-                      lineHeight: 22,
+                      color: THEME.colors.textPrimary,
+                      lineHeight: 21,
                     }}
                   >
                     {item.text}
@@ -250,30 +297,52 @@ export default function ResponderScreen() {
         {/* Wong-Baker FACES Pain Scale */}
         <View
           style={{
-            backgroundColor: '#1A1F2E',
-            borderRadius: 16,
+            backgroundColor: THEME.colors.surface,
+            borderRadius: THEME.borderRadius.card,
             padding: 16,
-            marginBottom: 20,
+            marginBottom: 16,
             borderWidth: 1,
-            borderColor: '#374151',
+            borderColor: THEME.colors.hairline,
           }}
         >
-          <Text
-            accessibilityRole={'header' as AccessibilityRole}
+          <View
             style={{
-              color: '#FEF08A',
-              fontSize: 16,
-              fontWeight: '800',
-              marginBottom: 8,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 6,
             }}
           >
-            Wong-Baker FACES® Pain Scale (0-10)
-          </Text>
+            <Text
+              accessibilityRole={'header' as AccessibilityRole}
+              style={{
+                color: THEME.colors.accent,
+                fontSize: 16,
+                fontWeight: '900',
+              }}
+            >
+              Wong-Baker FACES® Pain Scale
+            </Text>
+            {selectedPain !== null && (
+              <View
+                style={{
+                  backgroundColor: 'rgba(254, 240, 138, 0.15)',
+                  paddingVertical: 2,
+                  paddingHorizontal: 8,
+                  borderRadius: 6,
+                }}
+              >
+                <Text style={{ color: THEME.colors.accent, fontSize: 12, fontWeight: '800' }}>
+                  Score: {selectedPain}/10
+                </Text>
+              </View>
+            )}
+          </View>
           <Text
             style={{
-              color: '#94A3B8',
+              color: THEME.colors.textSecondary,
               fontSize: 13,
-              marginBottom: 14,
+              marginBottom: 12,
             }}
           >
             Patient: Tap the face that represents your pain level right now
@@ -301,32 +370,33 @@ export default function ResponderScreen() {
                   accessibilityLabel={`Pain level ${p.value}: ${label}`}
                   accessibilityState={{ selected: isSelected }}
                   onPress={() => handleSelectPain(p.value, label)}
+                  activeOpacity={0.7}
                   style={{
                     flex: 1,
                     alignItems: 'center',
                     paddingVertical: 10,
                     paddingHorizontal: 2,
-                    backgroundColor: isSelected ? '#FEF08A' : '#141824',
+                    backgroundColor: isSelected ? p.color : '#141824',
                     borderRadius: 12,
                     borderWidth: 2,
-                    borderColor: isSelected ? '#CA8A04' : '#2D3748',
+                    borderColor: isSelected ? '#FFFFFF' : p.color,
                   }}
                 >
                   <Text style={{ fontSize: 28, marginBottom: 4 }}>{p.emoji}</Text>
                   <Text
                     style={{
-                      color: isSelected ? '#0B0F19' : '#F8FAFC',
+                      color: isSelected ? '#FFFFFF' : THEME.colors.textPrimary,
                       fontSize: 14,
-                      fontWeight: '800',
+                      fontWeight: '900',
                     }}
                   >
                     {p.value}
                   </Text>
                   <Text
                     style={{
-                      color: isSelected ? '#0B0F19' : '#94A3B8',
+                      color: isSelected ? '#FFFFFF' : THEME.colors.textSecondary,
                       fontSize: 10,
-                      fontWeight: '600',
+                      fontWeight: '700',
                       textAlign: 'center',
                     }}
                     numberOfLines={1}
@@ -343,8 +413,8 @@ export default function ResponderScreen() {
         {currentQuestion ? (
           <View
             style={{
-              backgroundColor: '#1A1F2E',
-              borderRadius: 16,
+              backgroundColor: THEME.colors.surface,
+              borderRadius: THEME.borderRadius.card,
               padding: 16,
               borderWidth: 2,
               borderColor: '#60A5FA',
@@ -362,8 +432,8 @@ export default function ResponderScreen() {
               <Text
                 style={{
                   color: '#93C5FD',
-                  fontSize: 13,
-                  fontWeight: '700',
+                  fontSize: 12,
+                  fontWeight: '800',
                   textTransform: 'uppercase',
                   letterSpacing: 1,
                 }}
@@ -371,18 +441,20 @@ export default function ResponderScreen() {
                 Question {currentQuestionIndex + 1} of {questions.length}
               </Text>
 
-              {/* Question selector tabs */}
+              {/* Question selector step pills */}
               <View style={{ flexDirection: 'row', gap: 6 }}>
                 {questions.map((_, qIdx) => (
                   <TouchableOpacity
                     key={qIdx}
+                    accessibilityRole={'button' as AccessibilityRole}
+                    accessibilityLabel={`Go to question ${qIdx + 1}`}
                     onPress={() => loadQuestionOptions(qIdx)}
                     style={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: 13,
+                      width: 28,
+                      height: 28,
+                      borderRadius: 14,
                       backgroundColor:
-                        qIdx === currentQuestionIndex ? '#60A5FA' : '#252B3B',
+                        qIdx === currentQuestionIndex ? '#60A5FA' : THEME.colors.surfaceElevated,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
@@ -390,9 +462,9 @@ export default function ResponderScreen() {
                     <Text
                       style={{
                         color:
-                          qIdx === currentQuestionIndex ? '#0B0F19' : '#94A3B8',
+                          qIdx === currentQuestionIndex ? '#0B0F19' : THEME.colors.textSecondary,
                         fontSize: 12,
-                        fontWeight: '700',
+                        fontWeight: '800',
                       }}
                     >
                       {qIdx + 1}
@@ -404,10 +476,10 @@ export default function ResponderScreen() {
 
             <Text
               style={{
-                color: '#FEF08A',
-                fontSize: 22,
-                fontWeight: '800',
-                lineHeight: 28,
+                color: THEME.colors.accent,
+                fontSize: 21,
+                fontWeight: '900',
+                lineHeight: 27,
                 marginVertical: 6,
               }}
             >
@@ -416,7 +488,7 @@ export default function ResponderScreen() {
 
             <Text
               style={{
-                color: '#94A3B8',
+                color: THEME.colors.textSecondary,
                 fontSize: 13,
                 marginTop: 4,
                 marginBottom: 12,
@@ -437,10 +509,10 @@ export default function ResponderScreen() {
                     onPress={() => handleSelectOption(opt)}
                     activeOpacity={0.7}
                     style={{
-                      backgroundColor: '#252B3B',
+                      backgroundColor: THEME.colors.surfaceElevated,
                       borderRadius: 14,
-                      borderWidth: 2,
-                      borderColor: '#4B5563',
+                      borderWidth: 1.5,
+                      borderColor: THEME.colors.hairlineStrong,
                       paddingVertical: 14,
                       paddingHorizontal: 16,
                       minHeight: 56,
@@ -449,8 +521,8 @@ export default function ResponderScreen() {
                   >
                     <Text
                       style={{
-                        color: '#F8FAFC',
-                        fontSize: 18,
+                        color: THEME.colors.textPrimary,
+                        fontSize: 17,
                         fontWeight: '700',
                       }}
                     >
@@ -466,40 +538,63 @@ export default function ResponderScreen() {
             style={{
               padding: 20,
               alignItems: 'center',
-              backgroundColor: '#1A1F2E',
-              borderRadius: 16,
+              backgroundColor: THEME.colors.surface,
+              borderRadius: THEME.borderRadius.card,
               marginVertical: 10,
             }}
           >
-            <Text style={{ color: '#94A3B8', fontSize: 16 }}>
+            <Text style={{ color: THEME.colors.textSecondary, fontSize: 16 }}>
               {t('responder.noQuestions')}
             </Text>
           </View>
         )}
 
-        {/* Finish / Return to Gateway */}
-        <TouchableOpacity
-          accessibilityRole={'button' as AccessibilityRole}
-          accessibilityLabel="Finish exchange and return to Home Gateway"
-          onPress={() => router.replace('/')}
-          style={{
-            backgroundColor: '#22C55E',
-            borderRadius: 16,
-            paddingVertical: 16,
-            alignItems: 'center',
-            marginTop: 10,
-          }}
-        >
-          <Text
+        {/* Action Row */}
+        <View style={{ gap: 10 }}>
+          {/* Emergency Card Shortcut */}
+          <TouchableOpacity
+            accessibilityRole={'button' as AccessibilityRole}
+            accessibilityLabel="Show Emergency Medical Card to Responder"
+            onPress={() => router.push('/emergency-card')}
+            activeOpacity={0.8}
             style={{
-              color: '#0B0F19',
-              fontSize: 18,
-              fontWeight: '900',
+              backgroundColor: THEME.colors.surface,
+              borderRadius: THEME.borderRadius.card,
+              borderWidth: 1.5,
+              borderColor: THEME.colors.medical,
+              paddingVertical: 14,
+              alignItems: 'center',
             }}
           >
-            ✓ Complete Handshake
-          </Text>
-        </TouchableOpacity>
+            <Text style={{ color: THEME.colors.medical, fontSize: 16, fontWeight: '800' }}>
+              🪪 View Emergency Medical Card
+            </Text>
+          </TouchableOpacity>
+
+          {/* Complete Handshake Button */}
+          <TouchableOpacity
+            accessibilityRole={'button' as AccessibilityRole}
+            accessibilityLabel="Complete handshake exchange and return to Home Gateway"
+            onPress={() => router.replace('/')}
+            activeOpacity={0.8}
+            style={{
+              backgroundColor: THEME.colors.success,
+              borderRadius: THEME.borderRadius.card,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{
+                color: '#0B0F19',
+                fontSize: 18,
+                fontWeight: '900',
+              }}
+            >
+              ✓ Complete Handshake
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

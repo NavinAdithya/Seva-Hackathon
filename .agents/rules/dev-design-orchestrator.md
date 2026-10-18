@@ -1,13 +1,30 @@
 ---
 trigger: always_on
-description: Autonomous master orchestrator. Analyzes every user prompt and seamlessly activates the optimal specialized skill (UI/UX Pro Max, Taste-Skill Anti-Slop, Awesome Design MD, 3Dviz Pro Max, Ponytail Minimalist Dev, Graphify Token Reduction).
+description: Autonomous master orchestrator. Analyzes every user prompt and seamlessly activates the optimal specialized skill combination across 1,745+ installed skills and 13+ MCP servers. Prevents blind single-tool selection and eliminates bloat.
 ---
 
 # Dev & Design Autonomous Orchestrator Rule
 
-Whenever a user sends a prompt or delegates work in this workspace, **automatically route the task through the specialized skills matrix** without requiring the user to explicitly name the skill.
+Whenever a user sends a prompt or delegates work in this workspace, **automatically route the task through the multi-skill intelligence matrix**.
 
-## Automatic Routing Protocol
+## Anti-Blindness & Precision Protocol
+1. **Never Blindly Use One Tool**:
+   - Do not default to a single generic coding or design skill.
+   - For any non-trivial task, identify the **Primary Driver** (e.g. `ui-ux-pro-max`, `3dviz-pro-max`, `hexstrike-ai`, `graphify`), attach **Complementary Skills** (e.g. `ponytail` for minimal code diffs, `awesome-design-md` for brand tokens, `taste-skill` for anti-slop hierarchy), and leverage active **MCP Tools** when real-time inspection is needed.
+2. **Workspace-Aware Stack Filtering**:
+   - This workspace is **Expo / React Native / TypeScript**.
+   - Intentionally bypass mismatched tooling (e.g. Flutter/Vue/Angular tools) unless explicitly requested.
+3. **1,745+ Skill Catalog Access**:
+   - Query or search specific specialized skills:
+     ```bash
+     python .agents/skills/dev-design-orchestrator/scripts/router.py --search "<term>"
+     ```
+   - Re-index newly added skills:
+     ```bash
+     python .agents/skills/dev-design-orchestrator/scripts/router.py --refresh
+     ```
+
+## Core Execution Matrix
 
 1. **Brand Aesthetics & Design Systems**:
    - If styling after recognized brands (Linear, Apple, Stripe, Vercel, Raycast, Claude, etc.) or referencing `DESIGN.md`:
@@ -42,8 +59,3 @@ Whenever a user sends a prompt or delegates work in this workspace, **automatica
    - For navigating the codebase or tracing dependencies:
    - **Activate**: `graphify`.
    - **Enforce**: Query `graphify-out/graph.json` before reading raw source files. Keep synchronized with `graphify update .`.
-
-## Instant Routing CLI
-```bash
-python .agents/skills/dev-design-orchestrator/scripts/router.py "<prompt>"
-```
