@@ -39,3 +39,11 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Flutter build artifacts
+signsos_flutter/build/
+signsos_flutter/.dart_tool/
+signsos_flutter/.flutter-plugins
+signsos_flutter/.flutter-plugins-dependencies
+signsos_flutter/android/.gradle/
+*.apk
